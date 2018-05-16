@@ -61,12 +61,12 @@ namespace NuGetConsistencyChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;/div&gt;
+        ///   Looks up a localized string similar to &lt;p&gt;&amp;nbsp;&lt;/p&gt;
+        ///&lt;/div&gt;
         ///
         ///    &lt;script src=&apos;https://code.jquery.com/jquery-3.2.1.slim.min.js&apos; integrity=&apos;sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN&apos; crossorigin=&apos;anonymous&apos;&gt;&lt;/script&gt; 
         ///    &lt;script  src=&apos;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js&apos; integrity=&apos;sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q&apos; crossorigin=&apos;anonymous&apos;&gt;&lt;/script&gt;
-        ///    &lt;script src=&apos;https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js&apos;&gt;&lt;/script&gt;
-        ///&lt;/b [rest of string was truncated]&quot;;.
+        ///    &lt;script src=&apos;https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js&apos; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Bottom {
             get {

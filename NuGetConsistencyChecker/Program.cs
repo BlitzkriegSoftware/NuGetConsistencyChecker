@@ -13,14 +13,28 @@ using Newtonsoft.Json;
 
 namespace NuGetConsistencyChecker
 {
+    /// <summary>
+    /// Program
+    /// </summary>
     class Program
     {
-        // Zero = success, non-Zero = failure
+        /// <summary>
+        /// Zero = success, non-Zero = failure
+        /// </summary>
         static int exitCode = 0;
 
+        /// <summary>
+        /// List of packages
+        /// </summary>
         static List<NugetInfo> info = new List<NugetInfo>();
 
-        static void Compliance(string reportName)
+        /// <summary>
+        /// Compliance Report
+        /// <para>This was intended for orgs that need to track what libraries and versions are in use</para>
+        /// </summary>
+        /// <param name="reportName">Report Name</param>
+        /// <param name="folder">Where did we start looking</param>
+        static void Compliance(string reportName, string folder)
         {
             reportName = Path.ChangeExtension(reportName, ".htm");
             if (File.Exists(reportName))
@@ -66,7 +80,7 @@ namespace NuGetConsistencyChecker
                         last_v = item.Version;
                     }
 
-                    sb.Append(item.ProjectFolder);
+                    sb.Append(item.ProjectFolder.Replace(folder, ""));
                     sb.Append("<br/>");
                 }
 
@@ -78,7 +92,10 @@ namespace NuGetConsistencyChecker
             Console.WriteLine("Dump: {0}", reportName);
         }
 
-
+        /// <summary>
+        /// Dump of data structure for developers
+        /// </summary>
+        /// <param name="reportName">reportName</param>
         static void Dump(string reportName)
         {
             reportName = Path.ChangeExtension(reportName, ".json");
@@ -103,7 +120,12 @@ namespace NuGetConsistencyChecker
             Console.WriteLine("Dump: {0}", reportName);
         }
 
-        static void Report(string dirName, string reportName)
+        /// <summary>
+        /// Main Report Generator (DEV Centric)
+        /// </summary>
+        /// <param name="folder">Where did we start looking</param>
+        /// <param name="reportName">Path to report file</param>
+        static void Report(string folder, string reportName)
         {
             reportName = Path.ChangeExtension(reportName, ".txt");
             if (File.Exists(reportName))
@@ -131,7 +153,7 @@ namespace NuGetConsistencyChecker
 
                 using (System.IO.StreamWriter outs = new System.IO.StreamWriter(reportName))
                 {
-                    outs.WriteLine("Base Folder: {0}\n", dirName);
+                    outs.WriteLine("Base Folder: {0}\n", folder);
 
                     foreach (var r in results)
                     {
@@ -155,7 +177,7 @@ namespace NuGetConsistencyChecker
                             last_V = r.Version;
                             doit = true;
                         }
-                        if(doit) outs.WriteLine("\t\t\t{0}", r.ProjectFolder.Replace(dirName, ""));
+                        if(doit) outs.WriteLine("\t\t\t{0}", r.ProjectFolder.Replace(folder, ""));
                     }
                 }
                 
@@ -167,6 +189,10 @@ namespace NuGetConsistencyChecker
             }
         }
 
+        /// <summary>
+        /// Process a packages.json file to enrich metadata
+        /// </summary>
+        /// <param name="fi">FileInfo</param>
         static void Process(FileInfo fi)
         {
             string data = string.Empty;
@@ -218,6 +244,10 @@ namespace NuGetConsistencyChecker
             }
         }
 
+        /// <summary>
+        /// Find Packages Files
+        /// </summary>
+        /// <param name="dirInfo">DirectoryInfo</param>
         static void FindPackages(DirectoryInfo dirInfo)
         {
             foreach (var fi in dirInfo.GetFiles("packages.config", SearchOption.TopDirectoryOnly))
@@ -226,6 +256,10 @@ namespace NuGetConsistencyChecker
             }
         }
 
+        /// <summary>
+        /// Recursive Traverse
+        /// </summary>
+        /// <param name="dirInfo">DirectoryInfo</param>
         static void Traverse(DirectoryInfo dirInfo)
         {
             foreach (var di in dirInfo.GetDirectories())
@@ -235,6 +269,10 @@ namespace NuGetConsistencyChecker
             }
         }
 
+        /// <summary>
+        /// Handle Command Line Parsing Errors
+        /// </summary>
+        /// <param name="errors">(sic)</param>
         private static void HandleParseError(IEnumerable<Error> errors)
         {
             StringBuilder sb = new StringBuilder();
@@ -242,6 +280,10 @@ namespace NuGetConsistencyChecker
             Console.Error.WriteLine("{0}", sb.ToString());
         }
 
+        /// <summary>
+        /// Do main logic e.g. command line swiches were ok
+        /// </summary>
+        /// <param name="opts">Options</param>
         private static void RunOptionsAndReturnExitCode(Options opts)
         {
 
@@ -267,7 +309,7 @@ namespace NuGetConsistencyChecker
 
                 if(opts.Compliance)
                 {
-                    Compliance(opts.Report);
+                    Compliance(opts.Report, opts.Folder);
 
                 }
 
@@ -276,6 +318,10 @@ namespace NuGetConsistencyChecker
 
         }
 
+        /// <summary>
+        /// Entry Point
+        /// </summary>
+        /// <param name="args">(sic)</param>
         static void Main(string[] args)
         {
             CommandLine.Parser.Default.ParseArguments<Options>(args)
