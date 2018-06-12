@@ -89,7 +89,7 @@ namespace NuGetConsistencyChecker
                 File.WriteAllText(reportName, sb.ToString());
             }
 
-            Console.WriteLine("Dump: {0}", reportName);
+            Console.WriteLine("Compliance: {0}", reportName);
         }
 
         /// <summary>

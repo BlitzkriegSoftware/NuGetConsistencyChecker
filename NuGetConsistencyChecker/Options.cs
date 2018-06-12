@@ -17,7 +17,7 @@ namespace NuGetConsistencyChecker
         [Option('d', "dump", Default = false, HelpText="Dump data to the file.json")]
         public bool Dump { get; set; }
 
-        [Option('c', "Compliance", Default = false, HelpText = "Complaince Report" )]
+        [Option('c', "Compliance", Default = false, HelpText = "Compliance Report" )]
         public bool Compliance { get; set; }
     }
 }
