@@ -1,35 +1,22 @@
-# NuGetConsistencyChecker #
+# NuGet Consistency Checker 
 
-This recursively searches a tree of files looking for `packages.config` files and then produces a report of the version of each NuGet library that are in use and by what project.
+Two Versions:
+* .NET Framework in the `dotnetframework/`
+* .NET Core `dotnetcore/`
+ 
+# About 
 
-## Usage ##
+Stuart Williams
 
-Option 1: Change directories to where you want to start search in
+* Cloud/DevOps Practice Lead
+ 
+* Magenic Technologies Inc.
+* Office of the CTO
+ 
+* <a href="mailto:stuartw@magenic.com" target="_blank">stuartw@magenic.com</a> (e-mail)
 
-```DOS
-NuGetConsistencyChecker.exe
-```
+* Blog: <a href="http://blitzkriegsoftware.net/Blog" target="_blank">http://blitzkriegsoftware.net/Blog</a> 
+* LinkedIn: <a href="http://lnkd.in/P35kVT" target="_blank">http://lnkd.in/P35kVT</a> 
 
-Option 2: Specify folder and report name
+* YouTube: <a href="https://www.youtube.com/channel/UCO88zFRJMTrAZZbYzhvAlMg" target="_blank">https://www.youtube.com/channel/UCO88zFRJMTrAZZbYzhvAlMg</a> 
 
-```DOS
-NuGetConsistencyChecker.exe -f {folder to start in} -o {report-file-name}
-```
-
-## Also get JSON of all data ##
-
-```DOS
-NuGetConsistencyChecker.exe -f {folder to start in} -o {report-file-name} -d
-```
-
-## Also get Compliance Report ##
-
-```DOS
-NuGetConsistencyChecker.exe -f {folder to start in} -o {report-file-name} -c
-```
-
-
-
-## Exit Codes ##
-
-Zero (0) is success, not zero = failure
