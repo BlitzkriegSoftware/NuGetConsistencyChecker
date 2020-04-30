@@ -2,6 +2,14 @@
 
 This recursively searches a tree of files looking for `*.csproj` files and then produces a report of the version of each NuGet library that are in use and by what project.
 
+## Build a Single File
+
+```dos
+C:\code\blitz\NuGetConsistencyChecker\dotnetcore\ngcc2\singlefilebuild.cmd
+```
+
+Which will produce an EXE and a PDB of this utility as a single file. Very handy XCOPY deployable.
+
 ## Usage 
 
 Option 1: Change directories to where you want to start search in

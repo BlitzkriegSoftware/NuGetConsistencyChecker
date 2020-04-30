@@ -3,6 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Copyright>Copyright © 2019-2020 Blitzkrieg Software</Copyright>
+    <Company>Blitzkrieg Software</Company>
+    <Description>NuGet Consistancy Checker</Description>
+    <InformationalVersion>1.1.0</InformationalVersion>
+    <FileVersion>1.1.0</FileVersion>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <AssemblyName>ngcc2</AssemblyName>
+
   </PropertyGroup>
 
   <ItemGroup>
