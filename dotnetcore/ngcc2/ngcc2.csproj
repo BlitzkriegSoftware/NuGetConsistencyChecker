@@ -9,9 +9,9 @@
     <Copyright>Copyright © 2019-2020 Blitzkrieg Software</Copyright>
     <Company>Blitzkrieg Software</Company>
     <Description>NuGet Consistancy Checker</Description>
-    <InformationalVersion>1.2.0</InformationalVersion>
-    <FileVersion>1.2.0</FileVersion>
-    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <InformationalVersion>2.1.0</InformationalVersion>
+    <FileVersion>2.1.0</FileVersion>
+    <AssemblyVersion>2.1.0</AssemblyVersion>
     <AssemblyName>ngcc2</AssemblyName>
   </PropertyGroup>
 
@@ -23,10 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ComplianceFormat.Designer.cs">
+    <Compile Update="HtmlReportResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ComplianceFormat.resx</DependentUpon>
+      <DependentUpon>HtmlReportResource.resx</DependentUpon>
     </Compile>
     <Compile Update="Models\NuGet.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -36,17 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="ComplianceFormat.resx">
+    <EmbeddedResource Update="HtmlReportResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ComplianceFormat.Designer.cs</LastGenOutput>
+      <LastGenOutput>HtmlReportResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Models\NuGet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>NuGet.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
 </Project>

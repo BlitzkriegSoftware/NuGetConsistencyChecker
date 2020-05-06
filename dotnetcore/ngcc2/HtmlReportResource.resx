@@ -142,8 +142,6 @@
     &lt;meta charset="utf-8"&gt;
     &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
     &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
-    &lt;!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags --&gt;
-
     &lt;!-- NoCache triple --&gt;
     &lt;meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /&gt;
     &lt;meta http-equiv="Pragma" content="no-cache" /&gt;
@@ -152,12 +150,15 @@
     &lt;link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css'&gt;
     &lt;link rel='stylesheet', href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'&gt;
 
-    &lt;title&gt;Compliance Report&lt;/title&gt;
+    &lt;title&gt;NuGet Report&lt;/title&gt;
 
     &lt;style&gt;
         .bump-down {
             margin-top: 30px;
         }
+       h1 { color: #383838; }
+       h2 { color: blue;  margin-left: 8pt; }
+       h3 { color: purple; margin-left: 16pt; }
     &lt;/style&gt;
 
 &lt;/head&gt;

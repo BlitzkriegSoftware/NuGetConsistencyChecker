@@ -22,14 +22,14 @@ namespace ngcc2 {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ComplianceFormat {
+    internal class HtmlReportResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ComplianceFormat() {
+        internal HtmlReportResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ngcc2 {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ngcc2.ComplianceFormat", typeof(ComplianceFormat).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ngcc2.HtmlReportResource", typeof(HtmlReportResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -82,12 +82,12 @@ namespace ngcc2 {
         ///    &lt;meta charset=&quot;utf-8&quot;&gt;
         ///    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
         ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-        ///    &lt;!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags --&gt;
-        ///
         ///    &lt;!-- NoCache triple --&gt;
         ///    &lt;meta http-equiv=&quot;Cache-Control&quot; content=&quot;no-cache, no-store, must-revalidate&quot; /&gt;
         ///    &lt;meta http-equiv=&quot;Pragma&quot; content=&quot;no-cache&quot; /&gt;
-        ///    &lt;meta http-e [rest of string was truncated]&quot;;.
+        ///    &lt;meta http-equiv=&quot;Expires&quot; content=&quot;0&quot; /&gt;
+        ///
+        ///    &lt;link rel=&apos;stylesheet&apos; href=&apos;https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Top {
             get {

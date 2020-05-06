@@ -16,7 +16,13 @@ namespace ngcc2.Models
         [Option('d', "dump", Default = false, HelpText = "Dump data to the file.json")]
         public bool Dump { get; set; }
 
-        [Option('c', "Compliance", Default = false, HelpText = "Compliance Report")]
-        public bool Compliance { get; set; }
+        [Option('w', "html", Default = true, HelpText = "HTML Report")]
+        public bool WebReport { get; set; }
+
+        [Option('s', "simple-csv", Default = true, HelpText ="Simple alpha list of all NuGets")]
+        public bool SimpleCsv { get; set; }
+
+        [Option('t', "text-file", Default = false, HelpText ="Plain Text File")]
+        public bool PlainText { get; set; }
     }
 }
