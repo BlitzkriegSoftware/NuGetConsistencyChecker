@@ -11,14 +11,65 @@ namespace ngcc2.Models
         /// What folder are we consuming the package in?
         /// </summary>
         public string ProjectFile { get; set; }
+
         /// <summary>
         /// Package Name
         /// </summary>
         public string Id { get; set; }
+
         /// <summary>
         /// Version of Package
         /// </summary>
         public string Version { get; set; }
+
+        private int GetValue(int index)
+        {
+            int value = 0;
+            if (!string.IsNullOrWhiteSpace(this.Version))
+            {
+                var segs = this.Version.Split(new char[] { '.' }, System.StringSplitOptions.None);
+                if (segs.Length > index)
+                {
+                    if (int.TryParse(segs[index], out int temp)) value = temp;
+                }
+            }
+            return value;
+
+        }
+
+        /// <summary>
+        /// Parsed Major Version
+        /// </summary>
+        public int Major
+        {
+            get
+            {
+                return GetValue(0);
+            }
+        }
+
+        /// <summary>
+        /// Parsed Minor Version
+        /// </summary>
+        public int Minor
+        {
+            get
+            {
+                return GetValue(1);
+            }
+        }
+
+        /// <summary>
+        /// Parsed Buid Version
+        /// </summary>
+        public int Build
+        {
+            get
+            {
+                return GetValue(2);
+            }
+        }
+
         /// <summary>
         /// Version of .NET 
         /// </summary>
@@ -27,7 +78,7 @@ namespace ngcc2.Models
         public override string ToString()
         {
             var proj = string.Empty;
-            if(!string.IsNullOrWhiteSpace(this.ProjectFile))
+            if (!string.IsNullOrWhiteSpace(this.ProjectFile))
             {
                 var fi = new FileInfo(this.ProjectFile);
                 proj = fi.Name;

@@ -42,12 +42,12 @@ namespace ngcc2
                 var last_v = string.Empty;
 
                 var data = info.AsQueryable<NugetInfo>();
-                var results = data.OrderBy(p => p.Id).ThenBy(p => p.Version)
+                var results = data.OrderBy(p => p.Id).ThenBy(p => p.Major).ThenBy(p => p.Minor).ThenBy(p => p.Build).ThenBy(p => p.ProjectFile)
                     .Select(p => new { p.Id, p.Version, p.ProjectFile }).ToList();
 
                 sb.Append(ComplianceFormat.Top);
 
-                sb.Append("<h1>Compliance Report</h1>\n");
+                sb.Append($"<h1>Compliance Report: {DateTime.Now:d}</h1>\n");
 
                 foreach(var item in results)
                 {
@@ -105,7 +105,8 @@ namespace ngcc2
             if (info.Count > 0)
             {
                 var data = info.AsQueryable<NugetInfo>();
-                var results = data.OrderBy(p => p.TargetFramework).ThenBy(p => p.Id).ThenBy(p => p.Version).ThenBy(p => p.ProjectFile).Select(p => new { p.TargetFramework, p.Id, p.Version, p.ProjectFile }).ToList();
+                var results = data.OrderBy(p => p.Id).ThenBy(p => p.Major).ThenBy(p => p.Minor).ThenBy(p => p.Build).ThenBy(p=> p.ProjectFile)
+                    .Select(p => new { p.Id, p.Version, p.ProjectFile, p.TargetFramework }).ToList();
 
                 string last_T = null;
                 string last_I = string.Empty;
