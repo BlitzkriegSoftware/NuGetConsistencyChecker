@@ -22,6 +22,11 @@ namespace ngcc2.Models
         /// </summary>
         public string Version { get; set; }
 
+        /// <summary>
+        /// Latest Version from NuGet Org
+        /// </summary>
+        public string LatestVersion { get; set; }
+
         private int GetValue(int index)
         {
             int value = 0;
@@ -69,11 +74,6 @@ namespace ngcc2.Models
                 return GetValue(2);
             }
         }
-
-        /// <summary>
-        /// Version of .NET 
-        /// </summary>
-        public string TargetFramework { get; set; }
 
         public override string ToString()
         {

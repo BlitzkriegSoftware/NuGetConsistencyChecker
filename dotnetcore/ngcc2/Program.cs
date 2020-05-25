@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using CommandLine;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ngcc2.Models;
 
 namespace ngcc2
@@ -23,6 +27,9 @@ namespace ngcc2
         /// </summary>
         static readonly List<NugetInfo> info = new List<NugetInfo>();
 
+        static IHttpClientFactory _httpClientFactory;
+        private static Dictionary<string, string> NuGetVersionList = new Dictionary<string, string>();
+
         #region "Reports and Exports"
 
         /// <summary>
@@ -31,7 +38,7 @@ namespace ngcc2
         /// </summary>
         /// <param name="reportName">Report Name</param>
         /// <param name="folder">Where did we start looking</param>
-        static void HtmlReport(string reportName, string folder)
+        static void DumpHtml(string reportName, string folder)
         {
             reportName = Path.ChangeExtension(reportName, ".html");
             if (File.Exists(reportName)) File.Delete(reportName);
@@ -45,10 +52,12 @@ namespace ngcc2
 
                 var data = info.AsQueryable<NugetInfo>();
                 var results = data.OrderBy(p => p.Id).ThenBy(p => p.Major).ThenBy(p => p.Minor).ThenBy(p => p.Build).ThenBy(p => p.ProjectFile)
-                    .Select(p => new Models.NugetInfo() { 
-                     Version = string.IsNullOrWhiteSpace(p.Version) ? "0.0.0" : p.Version,
-                     Id = p.Id,
-                     ProjectFile = p.ProjectFile
+                    .Select(p => new Models.NugetInfo()
+                    {
+                        Version = string.IsNullOrWhiteSpace(p.Version) ? "0.0.0" : p.Version,
+                        Id = p.Id,
+                        ProjectFile = p.ProjectFile,
+                        LatestVersion = p.LatestVersion
                     }).ToList();
 
                 sb.Append(HtmlReportResource.Top);
@@ -76,7 +85,14 @@ namespace ngcc2
                         {
                             sb.Append("</ul>");
                         }
-                        sb.Append("<h3>" + item.Version + "</h3>\n");
+
+                        var stigil = " is latest";
+                        if (!item.Version.Equals(item.LatestVersion))
+                        {
+                            stigil = $" (old), latest: {item.LatestVersion}";
+                        }
+
+                        sb.Append($"<h3>{item.Version} {stigil}</h3>\n");
                         last_v = item.Version;
                         sb.Append("<ul>");
                     }
@@ -112,69 +128,10 @@ namespace ngcc2
         }
 
         /// <summary>
-        /// Main Report Generator (DEV Centric)
-        /// </summary>
-        /// <param name="folder">Where did we start looking</param>
-        /// <param name="reportName">Path to report file</param>
-        static void PlainText(string folder, string reportName)
-        {
-            reportName = Path.ChangeExtension(reportName, ".txt");
-            if (File.Exists(reportName)) File.Delete(reportName);
-
-            if (info.Count > 0)
-            {
-                var data = info.AsQueryable<NugetInfo>();
-                var results = data.OrderBy(p => p.Id).ThenBy(p => p.Major).ThenBy(p => p.Minor).ThenBy(p => p.Build).ThenBy(p => p.ProjectFile)
-                    .Select(p => new { p.Id, p.Version, p.ProjectFile, p.TargetFramework }).ToList();
-
-                string last_T = null;
-                string last_I = string.Empty;
-                string last_V = string.Empty;
-
-                using (System.IO.StreamWriter outs = new System.IO.StreamWriter(reportName))
-                {
-                    outs.WriteLine("Base Folder: {0}\n", folder);
-
-                    foreach (var r in results)
-                    {
-                        bool doit = false;
-                        if (r.TargetFramework != last_T)
-                        {
-                            outs.WriteLine("Target Framework: {0}", r.TargetFramework);
-                            last_T = r.TargetFramework;
-                            doit = true;
-                        }
-
-                        if (r.Id != last_I)
-                        {
-                            outs.WriteLine("\tPackage: {0}", r.Id);
-                            last_I = r.Id;
-                            doit = true;
-                        }
-                        if (r.Version != last_V)
-                        {
-                            outs.WriteLine("\t\tVersion: {0}", r.Version);
-                            last_V = r.Version;
-                            doit = true;
-                        }
-                        if (doit) outs.WriteLine("\t\t\t{0}", r.ProjectFile.Replace(folder, ""));
-                    }
-                }
-
-                Console.WriteLine("Plain Text: {0}", reportName);
-            }
-            else
-            {
-                Console.Error.WriteLine("No *.csproj files found");
-                exitCode = 2;
-            }
-        }
-
-        /// <summary>
         /// Dump as CSV for Excel Sorting and Filtering
         /// </summary>
         /// <param name="reportName"></param>
-        static void SimpleCsv(string reportName)
+        static void DumpCsv(string reportName)
         {
             reportName = Path.ChangeExtension(reportName, ".csv");
             if (File.Exists(reportName)) File.Delete(reportName);
@@ -182,7 +139,7 @@ namespace ngcc2
             {
                 var data = info.AsQueryable<NugetInfo>();
                 var results = data.OrderBy(p => p.Id).ThenBy(p => p.Major).ThenBy(p => p.Minor).ThenBy(p => p.Build).ThenBy(p => p.ProjectFile)
-                    .Select(p => new { p.Id, p.Version, p.ProjectFile }).ToList();
+                    .Select(p => new { p.Id, p.Version, p.LatestVersion, p.ProjectFile }).ToList();
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(reportName))
                 {
@@ -192,6 +149,10 @@ namespace ngcc2
                     file.Write(',');
                     file.Write('"');
                     file.Write("Version");
+                    file.Write('"');
+                    file.Write(',');
+                    file.Write('"');
+                    file.Write("Latest");
                     file.Write('"');
                     file.Write(',');
                     file.Write('"');
@@ -206,6 +167,10 @@ namespace ngcc2
                         file.Write(",");
                         file.Write('"');
                         file.Write(item.Version);
+                        file.Write('"');
+                        file.Write(",");
+                        file.Write('"');
+                        file.Write(item.LatestVersion);
                         file.Write('"');
                         file.Write(",");
                         file.Write('"');
@@ -248,12 +213,26 @@ namespace ngcc2
                     var ver = string.Empty;
                     if (pk.Attribute("Version") != null) ver = pk.Attribute("Version").Value;
 
+                    string latest = string.Empty;
+                    if (!NuGetVersionList.ContainsKey(dep))
+                    {
+                        latest = LastVersion(dep);
+                        if (!string.IsNullOrEmpty(latest))
+                        {
+                            NuGetVersionList.Add(dep, latest);
+                        }
+                    }
+                    else
+                    {
+                        latest = NuGetVersionList[dep];
+                    }
+
                     var ngi = new Models.NugetInfo()
                     {
                         Id = dep,
                         Version = ver,
-                        ProjectFile = fi.FullName,
-                        TargetFramework = "Core 3.1 LTS"
+                        LatestVersion = latest,
+                        ProjectFile = fi.FullName
                     };
 
                     if (verbose) Console.WriteLine($"{ngi}");
@@ -289,6 +268,42 @@ namespace ngcc2
                 FindPackages(di, verbose);
                 Traverse(di, verbose);
             }
+        }
+
+        /// <summary>
+        /// Find latest version of package
+        /// </summary>
+        /// <param name="nugetPackageName">NuGet Package Name</param>
+        /// <returns></returns>
+        static string LastVersion(string nugetPackageName)
+        {
+            string lastVersion = string.Empty;
+            string path = string.Empty;
+
+            try
+            {
+                using (var webClient = _httpClientFactory.CreateClient())
+                {
+                    webClient.BaseAddress = new Uri("https://api.nuget.org");
+                    path = $"/v3-flatcontainer/{nugetPackageName}/index.json";
+
+                    var json = webClient.GetStringAsync(path).GetAwaiter().GetResult();
+
+                    JObject jo = JObject.Parse(json);
+
+                    var versions = from p in jo["versions"]
+                                   where !p.Value<string>().Contains("preview")
+                                   select p.Value<string>();
+
+                    lastVersion = versions.LastOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"{path}: {ex.Message}");
+                lastVersion = string.Empty;
+            }
+            return lastVersion;
         }
 
         #endregion
@@ -328,11 +343,6 @@ namespace ngcc2
                 FindPackages(di, opts.Verbose);
                 Traverse(di, opts.Verbose);
 
-                if (opts.PlainText)
-                {
-                    PlainText(opts.Folder, opts.Report);
-                }
-
                 if (opts.Dump)
                 {
                     DumpJson(opts.Report);
@@ -340,20 +350,24 @@ namespace ngcc2
 
                 if (opts.WebReport)
                 {
-                    HtmlReport(opts.Report, opts.Folder);
+                    DumpHtml(opts.Report, opts.Folder);
                 }
 
                 if (opts.SimpleCsv)
                 {
-                    SimpleCsv(opts.Report);
+                    DumpCsv(opts.Report);
                 }
 
                 Environment.ExitCode = exitCode;
             }
 
         }
+
         static void Main(string[] args)
         {
+            var serviceProvider = new ServiceCollection().AddHttpClient().BuildServiceProvider();
+            _httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+
             CommandLine.Parser.Default.ParseArguments<NgccOptions>(args)
                 .WithParsed<NgccOptions>(opts => RunOptionsAndReturnExitCode(opts))
                 .WithNotParsed<NgccOptions>((errs) => HandleParseError(errs));

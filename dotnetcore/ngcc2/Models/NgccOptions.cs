@@ -13,16 +13,14 @@ namespace ngcc2.Models
         [Option('o', "output", Default = "", HelpText = "Path\\{filename}.txt for report")]
         public string Report { get; set; }
 
-        [Option('d', "dump", Default = false, HelpText = "Dump data to the file.json")]
+        [Option('j', "json", Default = false, HelpText = "JSON Export")]
         public bool Dump { get; set; }
 
-        [Option('w', "html", Default = true, HelpText = "HTML Report")]
+        [Option('h', "html", Default = true, HelpText = "HTML Report")]
         public bool WebReport { get; set; }
 
-        [Option('s', "simple-csv", Default = true, HelpText ="Simple alpha list of all NuGets")]
+        [Option('c', "csv", Default = true, HelpText ="CSV Export")]
         public bool SimpleCsv { get; set; }
 
-        [Option('t', "text-file", Default = false, HelpText ="Plain Text File")]
-        public bool PlainText { get; set; }
     }
 }
