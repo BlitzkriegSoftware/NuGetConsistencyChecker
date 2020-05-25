@@ -10,7 +10,30 @@ C:\code\blitz\NuGetConsistencyChecker\dotnetcore\ngcc2\singlefilebuild.cmd
 
 Which will produce an EXE and a PDB of this utility as a single file. Very handy XCOPY deployable.
 
-## Usage 
+## Usage
+
+```txt
+ngcc2 2.3.0
+Copyright c 2019-2020 Blitzkrieg Software
+
+  -v, --verbose    (Default: false) Enable Verbose
+
+  -f, --folder     (Default: .\) Folder to start in
+
+  -o, --output     (Default: ) Path\{filename}.txt for report
+
+  -j, --json       (Default: false) JSON Export
+
+  -h, --html       (Default: true) HTML Report
+
+  -c, --csv        (Default: true) CSV Export
+
+  --help           Display this help screen.
+
+  --version        Display version information.
+```
+
+## Usage Examples
 
 Option 1: Change directories to where you want to start search in
 
@@ -30,12 +53,6 @@ ngcc2 -f {folder to start in} -o {report-file-name}
 
 ```DOS
 ngcc2 -f {folder to start in} -o {report-file-name} -d
-```
-
-## Also get Compliance Report 
-
-```DOS
-ngcc2 -f {folder to start in} -o {report-file-name} -c
 ```
 
 ## Exit Codes 
