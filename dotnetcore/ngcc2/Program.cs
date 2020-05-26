@@ -30,6 +30,8 @@ namespace ngcc2
         static IHttpClientFactory _httpClientFactory;
         private static Dictionary<string, string> NuGetVersionList = new Dictionary<string, string>();
 
+        private static readonly string[] VersionAnnotationsToExclude = new string[] { "preview", "pre", "alpha", "beta", "m", "rc", "final", "dev" };
+
         #region "Reports and Exports"
 
         /// <summary>
@@ -277,6 +279,7 @@ namespace ngcc2
         /// <returns></returns>
         static string LastVersion(string nugetPackageName)
         {
+
             string lastVersion = string.Empty;
             string path = string.Empty;
 
@@ -291,11 +294,30 @@ namespace ngcc2
 
                     JObject jo = JObject.Parse(json);
 
-                    var versions = from p in jo["versions"]
-                                   where !p.Value<string>().Contains("preview")
-                                   select p.Value<string>();
+                    var okVersions = new List<string>();
 
-                    lastVersion = versions.LastOrDefault();
+                    var versions = (from p in jo["versions"]
+                                   select p.Value<string>()).ToList();
+
+                    foreach(var v in versions)
+                    {
+                        bool isOk = true;
+                        foreach(var e in VersionAnnotationsToExclude)
+                        {
+                            if(v.Contains(e))
+                            {
+                                isOk = false;
+                                break;
+                            }
+                        }
+
+                        if(isOk)
+                        {
+                            okVersions.Add(v);
+                        }
+                    }
+
+                    lastVersion = okVersions.LastOrDefault();
                 }
             }
             catch (Exception ex)

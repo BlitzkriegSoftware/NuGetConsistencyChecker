@@ -49,12 +49,23 @@ Option 2: Specify folder and report name
 ngcc2 -f {folder to start in} -o {report-file-name}
 ```
 
-## Also get JSON of all data 
-
-```DOS
-ngcc2 -f {folder to start in} -o {report-file-name} -d
-```
-
 ## Exit Codes 
 
 Zero (0) is success, not zero = failure
+
+## Getting the current NuGet Version
+
+This is checked via an HTTP GET to `https://api.nuget.org/v3-flatcontainer/{nugetPackageName}/index.json`
+
+## Excluded versions
+
+Versions that contain any of these strings are excluded from the current version calculation
+
+* "preview", 
+* "pre", 
+* "alpha", 
+* "beta", 
+* "m", 
+* "rc", 
+* "final", 
+* "dev" 
