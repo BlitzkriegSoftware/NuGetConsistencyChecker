@@ -192,8 +192,7 @@ namespace ngcc2
         /// Process a packages.json file to enrich metadata
         /// </summary>
         /// <param name="fi">FileInfo</param>
-        static void Process(FileInfo fi, bool verbose = false)
-        {
+        static void Process(FileInfo fi, Models.NgccOptions opts) { 
             XElement doc = XElement.Load(fi.FullName);
 
             IEnumerable<XElement> itemGroups =
@@ -234,12 +233,15 @@ namespace ngcc2
                         Id = dep,
                         Version = ver,
                         LatestVersion = latest,
-                        ProjectFile = fi.FullName
+                        ProjectFile = fi.FullName.Replace(opts.Folder,string.Empty)
                     };
 
-                    if (verbose) Console.WriteLine($"{ngi}");
+                    if (opts.Verbose) Console.WriteLine($"{ngi}");
 
-                    info.Add(ngi);
+                    if ((!opts.ExcludeCurrent) || string.IsNullOrWhiteSpace(ngi.LatestVersion) || (ngi.Version != ngi.LatestVersion))
+                    {
+                        info.Add(ngi);
+                    }
                 }
             }
 
@@ -249,12 +251,12 @@ namespace ngcc2
         /// Find Packages Files
         /// </summary>
         /// <param name="dirInfo">DirectoryInfo</param>
-        static void FindPackages(DirectoryInfo dirInfo, bool verbose = false)
+        static void FindPackages(DirectoryInfo dirInfo, Models.NgccOptions opts)
         {
             foreach (var fi in dirInfo.GetFiles("*.csproj", SearchOption.TopDirectoryOnly))
             {
-                if (verbose) Console.WriteLine($"FindPackages({fi.FullName})");
-                Process(fi, verbose);
+                if (opts.Verbose) Console.WriteLine($"FindPackages({fi.FullName})");
+                Process(fi, opts);
             }
         }
 
@@ -262,13 +264,13 @@ namespace ngcc2
         /// Recursive Traverse
         /// </summary>
         /// <param name="dirInfo">DirectoryInfo</param>
-        static void Traverse(DirectoryInfo dirInfo, bool verbose = false)
+        static void Traverse(DirectoryInfo dirInfo, Models.NgccOptions opts)
         {
             foreach (var di in dirInfo.GetDirectories())
             {
-                if (verbose) Console.WriteLine($"Traverse({di.FullName})");
-                FindPackages(di, verbose);
-                Traverse(di, verbose);
+                if (opts.Verbose) Console.WriteLine($"Traverse({di.FullName})");
+                FindPackages(di, opts);
+                Traverse(di, opts);
             }
         }
 
@@ -362,8 +364,8 @@ namespace ngcc2
                 if (string.IsNullOrWhiteSpace(opts.Report)) opts.Report = ".\\NGCC2.txt";
 
                 var di = new DirectoryInfo(opts.Folder);
-                FindPackages(di, opts.Verbose);
-                Traverse(di, opts.Verbose);
+                FindPackages(di, opts);
+                Traverse(di, opts);
 
                 if (opts.Dump)
                 {

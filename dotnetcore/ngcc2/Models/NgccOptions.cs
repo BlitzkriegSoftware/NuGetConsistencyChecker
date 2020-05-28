@@ -16,11 +16,14 @@ namespace ngcc2.Models
         [Option('j', "json", Default = false, HelpText = "JSON Export")]
         public bool Dump { get; set; }
 
-        [Option('h', "html", Default = true, HelpText = "HTML Report")]
+        [Option('h', "html", Default = false, HelpText = "HTML Report")]
         public bool WebReport { get; set; }
 
         [Option('c', "csv", Default = true, HelpText ="CSV Export")]
         public bool SimpleCsv { get; set; }
+
+        [Option('e', "Exclude Current", Default = false, HelpText = "Exclude Current NuGet Packages")]
+        public bool ExcludeCurrent { get; set; } = false;
 
     }
 }

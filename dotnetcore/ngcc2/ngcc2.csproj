@@ -9,11 +9,15 @@
     <Copyright>Copyright © 2019-2020 Blitzkrieg Software</Copyright>
     <Company>Blitzkrieg Software</Company>
     <Description>NuGet Consistancy Checker</Description>
-    <InformationalVersion>2.3.3</InformationalVersion>
-    <FileVersion>2.3.3</FileVersion>
-    <AssemblyVersion>2.3.3</AssemblyVersion>
+    <InformationalVersion>2.4.3</InformationalVersion>
+    <FileVersion>2.4.3</FileVersion>
+    <AssemblyVersion>2.4.3</AssemblyVersion>
     <AssemblyName>ngcc2</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
