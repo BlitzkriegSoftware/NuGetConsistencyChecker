@@ -28,7 +28,7 @@ namespace ngcc2
         static readonly List<NugetInfo> info = new List<NugetInfo>();
 
         static IHttpClientFactory _httpClientFactory;
-        private static Dictionary<string, string> NuGetVersionList = new Dictionary<string, string>();
+        private readonly static Dictionary<string, string> NuGetVersionList = new Dictionary<string, string>();
 
         private static readonly string[] VersionAnnotationsToExclude = new string[] { "preview", "pre", "alpha", "beta", "m", "rc", "final", "dev" };
 
