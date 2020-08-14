@@ -13,26 +13,28 @@ Which will produce an EXE and a PDB of this utility as a single file. Very handy
 ## Usage
 
 ```txt
-ngcc2 2.4.3
+ngcc2 2.5.1
 Copyright c 2019-2020 Blitzkrieg Software
 
-  -v, --verbose            (Default: false) Enable Verbose
+  -v, --verbose                (Default: false) Enable Verbose
 
-  -f, --folder             (Default: .\) Folder to start in
+  -f, --folder                 (Default: .\) Folder to start in
 
-  -o, --output             (Default: ) Path\{filename}.txt for report
+  -o, --output                 (Default: ) Path\{filename}.txt for report
 
-  -j, --json               (Default: false) JSON Export
+  -j, --json                   (Default: false) JSON Export
 
-  -h, --html               (Default: false) HTML Report
+  -h, --html                   (Default: false) HTML Report
 
-  -c, --csv                (Default: true) CSV Export
+  -c, --csv                    (Default: true) CSV Export
 
-  -e, --Exclude Current    (Default: false) Exclude Current NuGet Packages
+  -e, --Exclude Current        (Default: false) Exclude Current NuGet Packages
 
-  --help                   Display this help screen.
+  -n, --NuGet Alternate Url    (optional) 2nd NuGet Site to Check
 
-  --version                Display version information.
+  --help                       Display this help screen.
+
+  --version                    Display version information.
 ```
 
 ## Usage Examples
