@@ -25,5 +25,8 @@ namespace ngcc2.Models
         [Option('e', "Exclude Current", Default = false, HelpText = "Exclude Current NuGet Packages")]
         public bool ExcludeCurrent { get; set; } = false;
 
+        [Option('n', "NuGet Alternate Url", HelpText ="(optional) 2nd NuGet Site to Check")]
+        public string NuGetAltUrl { get; set; }
+
     }
 }

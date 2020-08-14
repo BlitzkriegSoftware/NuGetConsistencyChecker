@@ -217,10 +217,18 @@ namespace ngcc2
                     string latest = string.Empty;
                     if (!NuGetVersionList.ContainsKey(dep))
                     {
-                        latest = LastVersion(dep);
+                        latest = LastVersion(dep, "https://api.nuget.org");
                         if (!string.IsNullOrEmpty(latest))
                         {
                             NuGetVersionList.Add(dep, latest);
+                        }
+                        if(!string.IsNullOrWhiteSpace(opts.NuGetAltUrl))
+                        {
+                            latest = LastVersion(dep, opts.NuGetAltUrl);
+                            if (!string.IsNullOrEmpty(latest))
+                            {
+                                NuGetVersionList.Add(dep, latest);
+                            }
                         }
                     }
                     else
@@ -279,7 +287,7 @@ namespace ngcc2
         /// </summary>
         /// <param name="nugetPackageName">NuGet Package Name</param>
         /// <returns></returns>
-        static string LastVersion(string nugetPackageName)
+        static string LastVersion(string nugetPackageName, string nuGetRepoUrl)
         {
 
             string lastVersion = string.Empty;
@@ -289,7 +297,7 @@ namespace ngcc2
             {
                 using (var webClient = _httpClientFactory.CreateClient())
                 {
-                    webClient.BaseAddress = new Uri("https://api.nuget.org");
+                    webClient.BaseAddress = new Uri(nuGetRepoUrl);
                     path = $"/v3-flatcontainer/{nugetPackageName}/index.json";
 
                     var json = webClient.GetStringAsync(path).GetAwaiter().GetResult();
