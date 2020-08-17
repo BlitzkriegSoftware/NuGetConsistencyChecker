@@ -1,4 +1,7 @@
-﻿using CommandLine;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using CommandLine;
 
 namespace ngcc2.Models
 {
@@ -25,8 +28,35 @@ namespace ngcc2.Models
         [Option('e', "Exclude Current", Default = false, HelpText = "Exclude Current NuGet Packages")]
         public bool ExcludeCurrent { get; set; } = false;
 
-        [Option('n', "NuGet Alternate Url", HelpText ="(optional) 2nd NuGet Site to Check")]
-        public string NuGetAltUrl { get; set; }
+        [Option('n', "NuGet Configuration Files", Default = "ngcc2-urls.txt", HelpText ="NuGet Configuration File")]
+        public string NuGetConfigFile { get; set; }
 
+        private List<string> _nugets = null;
+
+        public List<string> NuGets
+        {
+            get
+            {
+                if (_nugets == null)
+                {
+                    _nugets = new List<string>();
+
+                    var recs = File.ReadAllLines(this.NuGetConfigFile);
+                    foreach (var s in recs)
+                    {
+                        if (!string.IsNullOrWhiteSpace(s))
+                        {
+                            var row = s.Trim();
+                            if (!row.StartsWith('#'))
+                            {
+                                _nugets.Add(row);
+                            }
+                        }
+                    }
+
+                }
+                return _nugets;
+            }
+        }
     }
 }

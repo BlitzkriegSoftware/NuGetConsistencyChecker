@@ -1,0 +1,7 @@
+﻿# This is the NuGet Configuration File
+# Comments start with a pound sign
+# the NuGet package in the URL is represented by {0}
+# One URL per line, processed top to bottom until we get valid info, or give up
+#
+# This is the standard NuGet
+https://api.nuget.org/v3-flatcontainer/{0}/index.json

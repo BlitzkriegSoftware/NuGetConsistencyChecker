@@ -9,11 +9,21 @@
     <Copyright>Copyright © 2019-2020 Blitzkrieg Software</Copyright>
     <Company>Blitzkrieg Software</Company>
     <Description>NuGet Consistancy Checker</Description>
-    <InformationalVersion>2.5.1</InformationalVersion>
-    <FileVersion>2.5.1</FileVersion>
-    <AssemblyVersion>2.5.1</AssemblyVersion>
+    <InformationalVersion>3.1.1</InformationalVersion>
+    <FileVersion>3.1.1</FileVersion>
+    <AssemblyVersion>3.1.1</AssemblyVersion>
     <AssemblyName>ngcc2</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ngcc2-urls.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ngcc2-urls.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

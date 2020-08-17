@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using CommandLine;
@@ -217,17 +216,13 @@ namespace ngcc2
                     string latest = string.Empty;
                     if (!NuGetVersionList.ContainsKey(dep))
                     {
-                        latest = LastVersion(dep, "https://api.nuget.org");
-                        if (!string.IsNullOrEmpty(latest))
+                        foreach(var u in opts.NuGets)
                         {
-                            NuGetVersionList.Add(dep, latest);
-                        }
-                        if(!string.IsNullOrWhiteSpace(opts.NuGetAltUrl))
-                        {
-                            latest = LastVersion(dep, opts.NuGetAltUrl);
-                            if (!string.IsNullOrEmpty(latest))
+                            var version = LastVersion(u, dep);
+                            if(!string.IsNullOrWhiteSpace(version))
                             {
-                                NuGetVersionList.Add(dep, latest);
+                                latest = version;
+                                break;
                             }
                         }
                     }
@@ -287,7 +282,7 @@ namespace ngcc2
         /// </summary>
         /// <param name="nugetPackageName">NuGet Package Name</param>
         /// <returns></returns>
-        static string LastVersion(string nugetPackageName, string nuGetRepoUrl)
+        static string LastVersion(string nuGetRepoUrl, string nugetPackageName)
         {
 
             string lastVersion = string.Empty;
@@ -297,8 +292,7 @@ namespace ngcc2
             {
                 using (var webClient = _httpClientFactory.CreateClient())
                 {
-                    webClient.BaseAddress = new Uri(nuGetRepoUrl);
-                    path = $"/v3-flatcontainer/{nugetPackageName}/index.json";
+                    path = string.Format(nuGetRepoUrl, nugetPackageName);
 
                     var json = webClient.GetStringAsync(path).GetAwaiter().GetResult();
 
